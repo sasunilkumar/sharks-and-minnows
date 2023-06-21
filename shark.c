@@ -58,9 +58,11 @@ void loop() {
       } else {
           set_motion(RIGHT);
       }
+  } else {
+      delay(200);
+      set_color(WHITE);
+      set_motion(STOP);
   }
-  delay(200);
-  set_color(WHITE);
 }
 
 int main() {

@@ -40,13 +40,12 @@ void setup() {
 }
 void loop() {
   if (new_message == 1) {
-      new_message = 0;
       set_color(VIOLET);
       set_motion(STOP);
   } else {
-      set_color(RGB(0,0,1));
+      set_color(BLUE);
       rand = rand_soft();
-      die = (rand % 4);
+      die = (rand % 3);
       if (die == 0) {
           set_motion(FORWARD);
       } else if (die == 1) {
