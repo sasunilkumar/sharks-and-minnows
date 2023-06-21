@@ -42,6 +42,8 @@ void loop() {
   if (new_message == 1) {
       set_color(VIOLET);
       set_motion(STOP);
+      delay(2000);
+      new_message = 0;
   } else {
       set_color(BLUE);
       rand = rand_soft();
