@@ -57,8 +57,9 @@ void loop() {
       } else if (die == 2) {
           set_motion(RIGHT);
       } else {
+	  set_color(WHITE);
 	  set_motion(STOP);
-	  delay(2000);
+	  delay(5000);
       }
       die = (rand % 3);
   } else {
