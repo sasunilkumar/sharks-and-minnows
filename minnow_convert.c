@@ -43,7 +43,7 @@ void loop() {
       set_color(VIOLET);
       set_motion(STOP);
       delay(2000);
-      new_message = 0;
+      kilo_
   } else {
       set_color(BLUE);
       rand = rand_soft();
@@ -55,7 +55,7 @@ void loop() {
       } else {
           set_motion(RIGHT);
       }
-      delay(500);
+      delay(100);
    }
 }
 int main() {

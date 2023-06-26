@@ -255,9 +255,9 @@ void loop() {
      1ba:	90 e0       	ldi	r25, 0x00	; 0
      1bc:	0e 94 81 00 	call	0x102	; 0x102 <set_motion>
       }
-      delay(100);
-     1c0:	84 e6       	ldi	r24, 0x64	; 100
-     1c2:	90 e0       	ldi	r25, 0x00	; 0
+      delay(500);
+     1c0:	84 ef       	ldi	r24, 0xF4	; 244
+     1c2:	91 e0       	ldi	r25, 0x01	; 1
      1c4:	0c 94 e5 01 	jmp	0x3ca	; 0x3ca <delay>
 
 000001c8 <message_rx_dummy>:

@@ -10,7 +10,7 @@
 #define LEFT 2
 #define RIGHT 3
 
-int message_sent = 0, new_message = 0, die = 0, rand = 0, curr;
+int message_sent = 0, new_message = 0, die = 4, rand = 0, curr;
 message_t transmit_msg;
 message_t *message_tx() {
   return &transmit_msg;
@@ -50,18 +50,19 @@ void loop() {
       delay(100);
       set_color(OFF);
       rand = rand_soft();
-      die = (rand % 3);
       if (die == 0) {
           set_motion(FORWARD);
       } else if (die == 1) {
           set_motion(LEFT);
-      } else {
+      } else if (die == 2) {
           set_motion(RIGHT);
+      } else {
+	  set_motion(STOP);
+	  delay(2000);
       }
+      die = (rand % 3);
   } else {
       delay(200);
-      set_color(WHITE);
-      set_motion(STOP);
   }
 }
 
