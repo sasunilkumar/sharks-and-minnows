@@ -39,7 +39,7 @@ void set_motion(int new_motion){
 
 void setup() {
   transmit_msg.type = NORMAL;
-  transmit_msg.data[0] = 0;
+  transmit_msg.data[0] = 1;
   transmit_msg.crc = message_crc(&transmit_msg);
 }
 

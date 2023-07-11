@@ -38,6 +38,7 @@ void set_motion(int new_motion){
 
 void setup() {
 }
+
 void loop() {
   if (new_message == 1) {
       set_color(VIOLET);
@@ -55,7 +56,7 @@ void loop() {
       } else {
           set_motion(RIGHT);
       }
-      delay(500);
+      delay(200);
    }
 }
 int main() {

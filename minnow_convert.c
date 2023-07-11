@@ -11,11 +11,17 @@
 #define LEFT 2
 #define RIGHT 3
 
-int new_message = 0, curr = 0, rand = 0, die = 0;
-message_t rcvd_message;
+int message_sent = 0, new_message = 0, curr = 0, rand = 0, die = 4;
+message_t rcvd_message, transmit_msg;
 void message_rx(message_t *msg, distance_measurement_t *dist) {
   rcvd_message = *msg;
   new_message = 1;
+}
+message_t *message_tx() {
+  return &transmit_msg;
+}
+void message_tx_success() {
+  message_sent = 1;
 }
 
 void set_motion(int new_motion){
@@ -37,13 +43,32 @@ void set_motion(int new_motion){
 }
 
 void setup() {
+      transmit_msg.type = NORMAL;
+      transmit_msg.data[0] = 0;
+      transmit_msg.crc = message_crc(&transmit_msg);
 }
 void loop() {
   if (new_message == 1) {
+      new_message = 0;
       set_color(VIOLET);
       set_motion(STOP);
-      delay(2000);
-      kilo_
+      delay(200);
+      transmit_msg.type = NORMAL;
+      transmit_msg.data[0] = 1;
+      transmit_msg.crc = message_crc(&transmit_msg);
+      if (message_sent == 1) {
+        message_sent = 0;
+        set_color(RED);
+        rand = rand_soft();
+        if (die == 0) {
+          set_motion(FORWARD);
+        } else if (die == 1) {
+          set_motion(LEFT);
+        } else {
+          set_motion(RIGHT);
+        }
+        die = (rand % 3);
+      }
   } else {
       set_color(BLUE);
       rand = rand_soft();
@@ -61,6 +86,8 @@ void loop() {
 int main() {
   kilo_init();
   kilo_message_rx = message_rx;
+  kilo_message_tx = message_tx;
+  kilo_message_tx_success = message_tx_success;
   kilo_start(setup, loop);
   return 0;
 }
