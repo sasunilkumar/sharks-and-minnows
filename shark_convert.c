@@ -10,7 +10,7 @@
 #define LEFT 2
 #define RIGHT 3
 
-int message_sent = 0, new_message = 0, die = 4, rand = 0, curr;
+int message_sent = 0, new_message = 0, die = 4, rand = 0, curr = 0;
 message_t transmit_msg;
 message_t *message_tx() {
   return &transmit_msg;

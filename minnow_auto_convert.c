@@ -16,10 +16,12 @@ int message_sent = 0, new_message = 0, curr = 0, rand = 0, die = 4;
 uint32_t last_changed = 0;
 int16_t current_light = 0;
 
-message_t rcvd_message;
+message_t recv_message;
 void message_rx(message_t *msg, distance_measurement_t *dist) {
-  rcvd_message = *msg;
-  new_message = 1;
+  recv_message = *msg;
+  if (recv_message.data[0] == 1) {
+    new_message = 1;
+  }
 }
 
 message_t transmit_msg;
@@ -65,44 +67,10 @@ void setup() {
   current_light = sample_light();
 }
 
-void shark() {
-
-}
-
-int16_t minnow(int16_t current) {
-  if (kilo_ticks > last_changed + 32) {
-      last_changed = kilo_ticks;
-      if (new_message == 1) {
-	new_message = 0;
-	transmit_msg.type = NORMAL;
-	transmit_msg.data[0] = 0;
-	transmit_msg.crc = &message_crc(transmit_msg);
-        set_color(VIOLET);
-        set_motion(STOP);
-	delay(2000);
-	shark();
-      } else {
-        set_color(BLUE);
-        rand = rand_soft();
-        die = (rand % 3);
-        if (die == 0) {
-          set_motion(FORWARD);
-        } else if (die == 1) {
-          set_motion(LEFT);
-        } else {
-          set_motion(RIGHT);
-        }
-        delay(100);
-      }
-  }
-  return sample_light();
-}
-
-void loop() {
-  while (current_light > 1000) {
-    current_light = minnow(current_light);
-  }
-  current_light = 0;
+int16_t shark() {
+  transmit_msg.type = NORMAL;
+  transmit_msg.data[0] = 1;
+  transmit_msg.crc = message_crc(&transmit_msg);
   if (message_sent == 1) {
       message_sent = 0;
       set_color(RED);
@@ -119,6 +87,44 @@ void loop() {
           delay(2500);
       }
       die = (rand % 3);
+  }
+  return sample_light();
+}
+
+int16_t minnow() {
+   if (new_message == 1) {
+        set_color(VIOLET);
+        set_motion(STOP);
+	delay(1000);
+	shark();
+    } else {
+        set_color(BLUE);
+        rand = rand_soft();
+        die = (rand % 3);
+        if (die == 0) {
+          set_motion(FORWARD);
+        } else if (die == 1) {
+          set_motion(LEFT);
+        } else {
+          set_motion(RIGHT);
+        }
+        delay(100);
+      }
+  return sample_light();
+}
+
+void loop() {
+  if (new_message == 1 && current_light > 1000) {
+    current_light = shark();
+  } else if ((new_message == 0) && (current_light > 1000)) {
+    current_light = minnow();
+  } else {
+    delay(500);
+    if (new_message == 1) {
+	current_light = shark();
+    } else {
+	current_light = minnow();
+    }
   }
 }
 
