@@ -7,7 +7,7 @@
  * rand: random value generator
  * current_light: used to store result of calling sample_light function
 */
-int message_sent = 0, die = 4, rand = 0;
+int message_sent = 0, die = 3, rand = 0, last_changed = 0;
 int16_t current_light = 0;
 
 // Functions continuously called to emit a message, like a beacon
@@ -41,14 +41,23 @@ int16_t shark() {
   return sample_light();
 }
 
+int16_t random_delayed() {
+  last_changed = kilo_ticks;
+  while (kilo_ticks < last_changed + 16) {
+    shark();
+  }
+  return sample_light();
+}
+
 void loop() {
   if (current_light < 1020 && current_light > 1000) {	// Continuously check if light level above threshold
     set_motion(STOP);
-    set_color(WHITE);
-    delay(250);			// If below, block for 1/4 second
-    shark();
+    set_color(GREEN);
+    delay(500);			// If below, block for 1/4 second
+    current_light = random_delayed();
+  } else {
+    current_light = shark();	// Take new light level reading
   }
-  current_light = shark();	// Take new light level reading
 }
 
 int main() {

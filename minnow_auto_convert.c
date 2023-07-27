@@ -55,7 +55,6 @@ int16_t shark() {
   return sample_light();			// Return current light conditions to main loop
 }
 
-
 // Function initially called when minnow has not yet been converted
 int16_t minnow() {
    if (new_message == 1) {	// Indicates transition behavior (turn purple, pause)
@@ -67,27 +66,35 @@ int16_t minnow() {
     } else {
         set_color(BLUE); // Indicates random walk behavior with blue light for minnow
         rand = rand_soft();
-        die = (rand % 3);
 	random_walk(die);
+        die = (rand % 3);
     }
   return sample_light(); // Again return current light conditions to main loop
 }
 
-void loop() {
-  if (tagged == 1 && current_light > 1000) {  // Shark, no delay as current_light is above threshold (nonshadow)
-    current_light = shark(message_sent);
-  } else if ((tagged == 0) && (current_light > 1000)) {
-    current_light = minnow();			// Minnow, no delay as current_light is above threshold (nonshadow)
-  } else {
-    set_motion(STOP);				// 1/2 second delay/movement blocking for either if in shadow
-    set_color(WHITE);
-    delay(250);
+int16_t random_delayed() {
+  last_changed = kilo_ticks;
+  while (kilo_ticks < last_changed + 32) {
     if (tagged == 1) {
-	shark();
-	current_light = shark();		// If shark, proceed with shark code and take new light measurement
+      shark();
     } else {
-	minnow();
-	current_light = minnow();		// If minnow, proceed with shark code and take new light measurement
+      minnow();
+    }
+  }
+  return sample_light();
+}
+
+void loop() {
+  if (current_light < 1020 && current_light > 1000) {
+    set_motion(STOP);				// 1/2 second delay/movement blocking for either if in shadow
+    set_color(GREEN);
+    delay(500);
+    current_light = random_delayed();
+  } else {
+    if (tagged == 1) {  // Shark, no delay as current_light is above threshold (nonshadow)
+      current_light = shark();
+    } else {
+      current_light = minnow();			// Minnow, no delay as current_light is above threshold (nonshadow)
     }
   }
 }
