@@ -51,16 +51,18 @@ void random_walk(int die) {
           set_motion(LEFT);
       } else if (die == 2) {
           set_motion(RIGHT);
-      } else if (die == 3) {                                  // Error handling, shouldn't reach unless for shark init
+      } else if (die == 3 || die == 4) {  // Initialization phase
+          if (die == 4) {
+	    set_color(WHITE);
+	    set_motion(STOP);
+	    delay(1500);
+          }
           set_color(GREEN);
           set_motion(STOP);
-	  delay(2000);
-      } else if (die == 4) {
+	  delay(1500);
+      } else {				  // Error handling, shouldn't reach
           set_motion(STOP);
-          set_color(WHITE);
-	  delay(1000);
-          set_color(GREEN);
-	  delay(1000);
+	  set_color(OFF);
       }
       delay(100);
 }
