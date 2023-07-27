@@ -11,7 +11,7 @@
  * last_changed: time marker (compared with internal clock to count minutes passed since program start)
  * current_light: used to store result of calling sample_light function
 */
-int new_message = 0, tagged = 0, message_sent = 0, curr = 0, rand = 0, die = 4;
+int new_message = 0, tagged = 0, message_sent = 0, curr = 0, rand = 0, die = 3;
 uint32_t last_changed = 0;
 int16_t current_light = 0;
 

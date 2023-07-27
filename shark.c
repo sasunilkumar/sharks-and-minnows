@@ -7,7 +7,7 @@
  * rand: random value generator
  * current_light: used to store result of calling sample_light function
 */
-int message_sent = 0, die = 3, rand = 0, last_changed = 0;
+int message_sent = 0, die = 4, rand = 0, last_changed = 0;
 int16_t current_light = 0;
 
 // Functions continuously called to emit a message, like a beacon
